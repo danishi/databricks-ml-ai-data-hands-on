@@ -371,4 +371,4 @@ display(results[["predicted_name", "actual_name", "correct"]].head(10))
 # MAGIC
 # MAGIC ### 次のステップ
 # MAGIC - **Streamlit アプリ**（`app/` ディレクトリ）を使って、ブラウザからモデルを呼び出すUIを作ってみましょう
-# MAGIC - ハンズオン完了後は **`03_cleanup.py`** でリソースをクリーンアップしてください
+# MAGIC - ハンズオン完了後は **`09_cleanup.py`** でリソースをクリーンアップしてください

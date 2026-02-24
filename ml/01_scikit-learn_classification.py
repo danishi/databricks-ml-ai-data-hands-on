@@ -298,4 +298,4 @@ plt.show()
 # MAGIC ### 次のステップ
 # MAGIC - ハイパーパラメータ（`n_estimators`, `max_depth`）を変えて精度の変化を観察してみましょう
 # MAGIC - MLflowのUI上で複数の実行結果を比較してみましょう
-# MAGIC - **次のノートブック `02_model_serving.py`** で、このモデルをAPIとして公開する方法を学びましょう
+# MAGIC - **次のノートブック `02_eda_feature_engineering.py`** でデータの前処理を学びましょう

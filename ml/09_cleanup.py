@@ -12,7 +12,7 @@
 # MAGIC > ハンズオン終了後は必ずこのノートブックを実行してクリーンアップしてください。
 # MAGIC
 # MAGIC ## 前提条件
-# MAGIC - `02_model_serving.py` を実行済みであること
+# MAGIC - `08_model_serving.py` を実行済みであること
 # MAGIC - Databricks Runtime ML のクラスターを使用してください
 # MAGIC
 # MAGIC ---
@@ -27,7 +27,7 @@
 # MAGIC %md
 # MAGIC ## 設定値の確認
 # MAGIC
-# MAGIC `02_model_serving.py` で使用したのと同じ値を設定します。
+# MAGIC `08_model_serving.py` で使用したのと同じ値を設定します。
 
 # COMMAND ----------
 
@@ -37,10 +37,17 @@ dbutils.widgets.text("schema", "default", "スキーマ名")
 catalog = dbutils.widgets.get("catalog")
 schema = dbutils.widgets.get("schema")
 
-model_name = f"{catalog}.{schema}.wine_classifier"
+model_names = [
+    f"{catalog}.{schema}.wine_classifier",
+    f"{catalog}.{schema}.wine_best_model",
+]
+feature_table_name = f"{catalog}.{schema}.wine_features"
 endpoint_name = "wine-classifier-endpoint"
 
-print(f"削除対象モデル: {model_name}")
+print("削除対象モデル:")
+for m in model_names:
+    print(f"  - {m}")
+print(f"削除対象特徴量テーブル: {feature_table_name}")
 print(f"削除対象エンドポイント: {endpoint_name}")
 
 # COMMAND ----------
@@ -76,18 +83,29 @@ from mlflow import MlflowClient
 
 mlflow_client = MlflowClient()
 
-try:
-    # 全バージョンを削除
-    versions = mlflow_client.search_model_versions(f"name='{model_name}'")
-    for v in versions:
-        mlflow_client.delete_model_version(model_name, v.version)
-        print(f"  モデルバージョン {v.version} を削除しました")
+for model_name in model_names:
+    try:
+        versions = mlflow_client.search_model_versions(f"name='{model_name}'")
+        for v in versions:
+            mlflow_client.delete_model_version(model_name, v.version)
+            print(f"  モデルバージョン {v.version} を削除しました")
+        mlflow_client.delete_registered_model(model_name)
+        print(f"登録済みモデル '{model_name}' を削除しました")
+    except Exception as e:
+        print(f"モデル '{model_name}' の削除をスキップしました（理由: {e}）")
 
-    # モデル自体を削除
-    mlflow_client.delete_registered_model(model_name)
-    print(f"登録済みモデル '{model_name}' を削除しました")
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## 3. 特徴量テーブルの削除
+
+# COMMAND ----------
+
+try:
+    spark.sql(f"DROP TABLE IF EXISTS {feature_table_name}")
+    print(f"特徴量テーブル '{feature_table_name}' を削除しました")
 except Exception as e:
-    print(f"モデルの削除をスキップしました（理由: {e}）")
+    print(f"特徴量テーブルの削除をスキップしました（理由: {e}）")
 
 # COMMAND ----------
 
