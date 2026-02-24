@@ -1,0 +1,4 @@
+databricks-sdk
+openai
+streamlit
+numpy

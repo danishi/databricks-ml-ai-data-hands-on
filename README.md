@@ -53,15 +53,19 @@ Databricks 上で機械学習（ML）と生成AI を低コストで試せる初�
 | # | ノートブック | 内容 |
 |---|---|---|
 | 1 | `genai/01_foundation_model_apis.py` | Foundation Model APIs で LLM を呼び出し。感情分析・構造化出力・Embedding など。 |
+| 2 | `genai/02_rag_chat.py` | RAG（検索拡張生成）の仕組みをステップバイステップで学習。ドキュメント検索＋LLM回答生成。 |
+| 3 | `genai/03_cleanup.py` | 生成AIハンズオンのリソースクリーンアップ。 |
 
 ### App（Databricks Apps）
 
-| ファイル | 内容 |
+| ディレクトリ | 内容 |
 |---|---|
-| `app/app.py` | Model Serving エンドポイントを呼び出す Streamlit アプリ。Databricks Apps としてデプロイ。 |
-| `app/requirements.txt` | アプリの依存ライブラリ。 |
+| `app/` | Model Serving エンドポイントを呼び出す **ワイン分類予測アプリ**（Streamlit）。 |
+| `app_rag/` | 社内FAQドキュメントに基づく **RAGチャットボット**（Streamlit）。 |
 
 ## 推奨する実行順序
+
+### ML コース
 
 ```
 1. ml/01_scikit-learn_classification.py  ← モデルの学習・評価
@@ -70,14 +74,25 @@ Databricks 上で機械学習（ML）と生成AI を低コストで試せる初�
 4. ml/03_cleanup.py                     ← リソースの削除（終了時）
 ```
 
+### GenAI コース
+
+```
+1. genai/01_foundation_model_apis.py    ← LLMの基本操作・Embedding
+2. genai/02_rag_chat.py                 ← RAGの仕組みを理解
+3. app_rag/ をDatabricks Appsとしてデプロイ ← RAGチャットUI
+4. genai/03_cleanup.py                  ← リソースの削除（終了時）
+```
+
+> ML コースと GenAI コースは独立しており、どちらから始めても構いません。
+
 ## Databricks App のデプロイ方法
 
-`app/` ディレクトリの Streamlit アプリを Databricks Apps としてデプロイする手順:
+`app/` または `app_rag/` ディレクトリの Streamlit アプリを Databricks Apps としてデプロイする手順:
 
 1. 左サイドバーの **「コンピューティング」** → **「アプリ」** を選択
 2. **「アプリの作成」** をクリック
-3. アプリ名を入力（例: `wine-classifier-app`）
-4. ソースコードのパスとして、クローンしたリポジトリ内の `app/` フォルダを指定
+3. アプリ名を入力（例: `wine-classifier-app` / `rag-chat-app`）
+4. ソースコードのパスとして、クローンしたリポジトリ内の `app/` または `app_rag/` フォルダを指定
 5. **「デプロイ」** を実行
 
 デプロイ後、表示されるURLにアクセスするとアプリが開きます。
@@ -87,25 +102,31 @@ Databricks 上で機械学習（ML）と生成AI を低コストで試せる初�
 ```
 databricks-ai-ml-hands-on/
 ├── README.md
-├── ml/                                  # 機械学習ノートブック
-│   ├── 01_scikit-learn_classification.py  # モデルの学習・評価
-│   ├── 02_model_serving.py                # モデルサービング
-│   └── 03_cleanup.py                      # リソースのクリーンアップ
-├── genai/                               # 生成AIノートブック
-│   └── 01_foundation_model_apis.py        # Foundation Model APIs
-└── app/                                 # Databricks App（Streamlit）
-    ├── app.py                             # Streamlitアプリ本体
-    └── requirements.txt                   # 依存ライブラリ
+├── ml/                                    # 機械学習ノートブック
+│   ├── 01_scikit-learn_classification.py    # モデルの学習・評価
+│   ├── 02_model_serving.py                  # モデルサービング
+│   └── 03_cleanup.py                        # リソースのクリーンアップ
+├── genai/                                 # 生成AIノートブック
+│   ├── 01_foundation_model_apis.py          # Foundation Model APIs
+│   ├── 02_rag_chat.py                       # RAG（検索拡張生成）
+│   └── 03_cleanup.py                        # リソースのクリーンアップ
+├── app/                                   # Databricks App: ワイン分類予測
+│   ├── app.py
+│   └── requirements.txt
+└── app_rag/                               # Databricks App: RAGチャット
+    ├── app.py
+    └── requirements.txt
 ```
 
 ## コスト目安
 
 - **ML 01（分類モデル）**: シングルノードクラスターで数分で完了します
 - **ML 02（モデルサービング）**: Model Serving エンドポイントの稼働時間に応じた課金。`scale_to_zero_enabled=True` 設定により、未使用時の課金を抑えられます
-- **生成AIノートブック**: Foundation Model APIs は pay-per-token のため、このハンズオンの範囲では少額で収まります
+- **GenAI 01〜02（LLM・RAG）**: Foundation Model APIs は pay-per-token のため、このハンズオンの範囲では少額で収まります
 - **Databricks App**: アプリの稼働時間に応じた課金。不要になったら削除してください
 
-> **重要**: ハンズオン終了後は必ず `ml/03_cleanup.py` を実行し、エンドポイントとアプリを削除してください。
+> **重要**: ハンズオン終了後は必ずクリーンアップノートブック（`ml/03_cleanup.py`、`genai/03_cleanup.py`）を実行し、
+> エンドポイントとアプリを削除してください。
 
 ## ライセンス
 
