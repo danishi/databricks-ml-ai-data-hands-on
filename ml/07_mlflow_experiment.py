@@ -74,7 +74,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 # COMMAND ----------
 
 # 実験名を設定
-experiment_name = f"/Users/{spark.conf.get('spark.databricks.workspaceUrl', 'user')}/wine_model_comparison"
+user_name = dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
+experiment_name = f"/Users/{user_name}/wine_model_comparison"
 mlflow.set_experiment(experiment_name)
 
 models = {
