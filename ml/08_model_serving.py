@@ -242,6 +242,7 @@ except Exception:
     w.serving_endpoints.create_and_wait(
         name=endpoint_name,
         config=EndpointCoreConfigInput(
+            name=endpoint_name,
             served_entities=[
                 ServedEntityInput(
                     entity_name=model_name,
