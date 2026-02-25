@@ -370,8 +370,8 @@ results["predicted_class"] = [int(p) for p in response.predictions]
 results["predicted_name"] = results["predicted_class"].map(
     {i: name for i, name in enumerate(wine.target_names)}
 )
-results["actual_class"] = y_test.values
-results["actual_name"] = pd.Series(y_test.values).map(
+results["actual_class"] = y_test
+results["actual_name"] = pd.Series(y_test).map(
     {i: name for i, name in enumerate(wine.target_names)}
 ).values
 results["correct"] = results["predicted_class"] == results["actual_class"]
