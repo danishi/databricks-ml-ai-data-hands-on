@@ -134,7 +134,7 @@ def main():
                 st.error(f"予測に失敗しました: {e}")
                 st.info(
                     "エンドポイント 'wine-classifier-endpoint' が起動していることを確認してください。\n\n"
-                    "ノートブック `ml/02_model_serving.py` を先に実行してエンドポイントを作成してください。"
+                    "ノートブック `ml/08_model_serving.py` を先に実行してエンドポイントを作成してください。"
                 )
 
 

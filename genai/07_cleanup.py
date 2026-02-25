@@ -116,6 +116,6 @@ except Exception as e:
 # MAGIC | Databricks App（RAGチャット） | 手動削除（UIから） |
 # MAGIC | クラスター | 手動停止 |
 # MAGIC
-# MAGIC > **MLハンズオンのリソース**を削除する場合は `ml/09_cleanup.py` を実行してください。
+# MAGIC > **MLハンズオンのリソース**を削除する場合は `ml/10_cleanup.py` を実行してください。
 # MAGIC
 # MAGIC お疲れさまでした！

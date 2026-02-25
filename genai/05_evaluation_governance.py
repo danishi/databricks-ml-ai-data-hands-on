@@ -348,8 +348,9 @@ for out in test_outputs:
 # MAGIC 4. **ガードレール** — 入出力フィルタリングによる安全性確保
 # MAGIC 5. **責任あるAI** — 透明性・公平性・プライバシー・安全性の原則
 # MAGIC
-# MAGIC ### クリーンアップ
-# MAGIC - ハンズオン終了後は `06_cleanup.py` でリソースを削除してください
+# MAGIC ### 次のステップ
+# MAGIC - 次のノートブック **`06_databricks_app.py`** で、Databricks Apps を使って RAG チャットボットアプリをデプロイしましょう
+# MAGIC - ハンズオン完了後は `07_cleanup.py` でリソースを削除してください
 # MAGIC
 # MAGIC > **認定試験との関連** (GenAI Engineer Associate):
 # MAGIC > - **Evaluate and Optimize**: Faithfulness, Relevance, Groundedness, Toxicity の各指標

@@ -60,7 +60,8 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 | 6 | `ml/06_feature_store.py` | Unity Catalog Feature Store、特徴量ルックアップ | Databricks ML |
 | 7 | `ml/07_mlflow_experiment.py` | MLflow Tracking / Model Registry / エイリアス | Databricks ML |
 | 8 | `ml/08_model_serving.py` | Model Serving エンドポイント、REST API 推論 | モデルデプロイ |
-| 9 | `ml/09_cleanup.py` | リソースのクリーンアップ | — |
+| 9 | `ml/09_databricks_app.py` | Databricks Apps によるワイン分類予測アプリのデプロイ | モデルデプロイ |
+| 10 | `ml/10_cleanup.py` | リソースのクリーンアップ | — |
 
 ### GenAI（生成AI）
 
@@ -71,15 +72,15 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 | 3 | `genai/03_vector_search_rag.py` | Vector Search、チャンク分割、Delta Sync Index | RAG データ準備 |
 | 4 | `genai/04_agents_tool_use.py` | プロンプトチェイニング、ツール使用、エージェント | マルチステージ推論 |
 | 5 | `genai/05_evaluation_governance.py` | LLM-as-a-Judge、ガードレール、責任あるAI | 評価・ガバナンス |
-| 6 | `genai/06_cleanup.py` | リソースのクリーンアップ | — |
+| 6 | `genai/06_databricks_app.py` | Databricks Apps による RAG チャットボットのデプロイ | Databricks ツール |
+| 7 | `genai/07_cleanup.py` | リソースのクリーンアップ | — |
 
 ### App（Databricks Apps）
 
-| # | ファイル | 内容 |
+| ファイル | 内容 | 対応ノートブック |
 |---|---|---|
-| - | `app/deploy_guide.py` | **Databricks Apps デプロイガイド**（デプロイ手順の解説ノートブック） |
-| - | `app/app.py` | Model Serving を呼び出す **ワイン分類予測アプリ**（Streamlit） |
-| - | `app_rag/app.py` | 社内FAQドキュメントに基づく **RAGチャットボット**（Streamlit） |
+| `app/app.py` | Model Serving を呼び出す **ワイン分類予測アプリ**（Streamlit） | `ml/09_databricks_app.py` |
+| `app_rag/app.py` | 社内FAQドキュメントに基づく **RAGチャットボット**（Streamlit） | `genai/06_databricks_app.py` |
 
 ## 認定資格の試験範囲マッピング
 
@@ -90,7 +91,7 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 | **Databricks Machine Learning** | 38% | 05 (AutoML), 06 (Feature Store), 07 (MLflow) |
 | **Data Processing** | 19% | 01 (データ準備), 02 (EDA・特徴量エンジニアリング) |
 | **Model Development** | 31% | 01 (scikit-learn), 03 (Hyperopt), 04 (Spark ML Pipeline) |
-| **Model Deployment** | 12% | 08 (Model Serving), app/ (Streamlit App) |
+| **Model Deployment** | 12% | 08 (Model Serving), 09 (Databricks Apps) |
 
 ### Databricks Certified Generative AI Engineer Associate
 
@@ -101,7 +102,7 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 | **Build Multi-stage Reasoning Applications** | 04 (エージェント, ツール使用, チェイニング) |
 | **Evaluate and Optimize** | 05 (LLM-as-a-Judge, 評価指標) |
 | **Governance and Security** | 05 (ガードレール, PII検出, 責任あるAI) |
-| **Databricks Tools** | 01 (Foundation Model APIs), 03 (Vector Search) |
+| **Databricks Tools** | 01 (Foundation Model APIs), 03 (Vector Search), 06 (Databricks Apps) |
 
 ## 推奨する実行順序
 
@@ -116,9 +117,8 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 6. ml/06_feature_store.py                ← Feature Store
 7. ml/07_mlflow_experiment.py            ← MLflow 実験管理
 8. ml/08_model_serving.py               ← モデルをAPIとして公開
-9. app/deploy_guide.py                  ← Databricks Apps のデプロイ手順を学ぶ
-10. app/ をDatabricks Appsとしてデプロイ   ← ブラウザからモデルを呼び出すUI
-11. ml/09_cleanup.py                     ← リソースの削除（終了時）
+9. ml/09_databricks_app.py              ← Databricks Appsでワイン分類アプリをデプロイ
+10. ml/10_cleanup.py                     ← リソースの削除（終了時）
 ```
 
 ### GenAI コース
@@ -129,8 +129,8 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 3. genai/03_vector_search_rag.py        ← Vector Searchによる本格RAG
 4. genai/04_agents_tool_use.py          ← エージェントとツール使用
 5. genai/05_evaluation_governance.py    ← 評価とガバナンス
-6. app_rag/ をDatabricks Appsとしてデプロイ ← RAGチャットUI
-7. genai/06_cleanup.py                  ← リソースの削除（終了時）
+6. genai/06_databricks_app.py           ← Databricks AppsでRAGチャットアプリをデプロイ
+7. genai/07_cleanup.py                  ← リソースの削除（終了時）
 ```
 
 > ML コースと GenAI コースは独立しており、どちらから始めても構いません。
@@ -147,6 +147,8 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 
 デプロイ後、表示されるURLにアクセスするとアプリが開きます。
 
+> 詳細な手順は各コースのノートブック（`ml/09_databricks_app.py`、`genai/06_databricks_app.py`）を参照してください。
+
 ## ディレクトリ構成
 
 ```
@@ -161,16 +163,17 @@ databricks-ai-ml-hands-on/
 │   ├── 06_feature_store.py                      # Feature Store
 │   ├── 07_mlflow_experiment.py                  # MLflow 実験管理
 │   ├── 08_model_serving.py                      # モデルサービング
-│   └── 09_cleanup.py                            # クリーンアップ
+│   ├── 09_databricks_app.py                     # Databricks Apps デプロイ
+│   └── 10_cleanup.py                            # クリーンアップ
 ├── genai/                                     # 生成AIノートブック
 │   ├── 01_foundation_model_apis.py              # Foundation Model APIs
 │   ├── 02_rag_chat.py                           # RAG（検索拡張生成）
 │   ├── 03_vector_search_rag.py                  # Vector Search RAG
 │   ├── 04_agents_tool_use.py                    # エージェントとツール使用
 │   ├── 05_evaluation_governance.py              # 評価とガバナンス
-│   └── 06_cleanup.py                            # クリーンアップ
+│   ├── 06_databricks_app.py                     # Databricks Apps デプロイ
+│   └── 07_cleanup.py                            # クリーンアップ
 ├── app/                                       # Databricks App: ワイン分類予測
-│   ├── deploy_guide.py                          # デプロイ手順のガイドノートブック
 │   ├── app.py
 │   └── requirements.txt
 └── app_rag/                                   # Databricks App: RAGチャット
@@ -188,7 +191,7 @@ databricks-ai-ml-hands-on/
 - **GenAI 03 (Vector Search)**: Vector Search エンドポイント稼働時間に応じた課金
 - **Databricks App**: アプリ稼働時間に応じた課金
 
-> **重要**: ハンズオン終了後は必ずクリーンアップノートブック（`ml/09_cleanup.py`、`genai/06_cleanup.py`）を実行してください。
+> **重要**: ハンズオン終了後は必ずクリーンアップノートブック（`ml/10_cleanup.py`、`genai/07_cleanup.py`）を実行してください。
 
 ## ライセンス
 

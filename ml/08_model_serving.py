@@ -393,8 +393,8 @@ display(results[["predicted_name", "actual_name", "correct"]].head(10))
 # MAGIC 4. **バッチ予測** — 複数データの一括予測
 # MAGIC
 # MAGIC ### 次のステップ
-# MAGIC - **Streamlit アプリ**（`app/` ディレクトリ）を使って、ブラウザからモデルを呼び出すUIを作ってみましょう
-# MAGIC - ハンズオン完了後は **`09_cleanup.py`** でリソースをクリーンアップしてください
+# MAGIC - 次のノートブック **`09_databricks_app.py`** で、Databricks Apps を使ってブラウザからモデルを呼び出す Streamlit アプリをデプロイしましょう
+# MAGIC - ハンズオン完了後は **`10_cleanup.py`** でリソースをクリーンアップしてください
 # MAGIC
 # MAGIC > **認定試験との関連** (ML Associate):
 # MAGIC > - **Model Deployment (12%)**: バッチ/リアルタイム/ストリーミングの違い、カスタムモデルのエンドポイントデプロイ手順
