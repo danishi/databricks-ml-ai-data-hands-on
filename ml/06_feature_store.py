@@ -221,6 +221,7 @@ inference_sdf = spark.createDataFrame(
 predictions = fe.score_batch(
     model_uri=f"runs:/{run.info.run_id}/model",
     df=inference_sdf,
+    env_manager="virtualenv",
 )
 
 display(predictions.select("wine_id", "prediction"))
