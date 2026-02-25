@@ -141,7 +141,10 @@ for i, (pred, actual) in enumerate(zip(predictions, df["target"].head(5))):
 
 # 生成されたノートブックのURLを表示
 print("=== 生成されたノートブック ===")
-print(f"データ探索ノートブック: {summary.output_table_name}")
+print(f"MLflow Experiment ID: {summary.experiment.experiment_id}")
+print(f"MLflow Experiment Name: {summary.experiment.name}")
+for trial in summary.trials:
+    print(f"  Trial: {trial.mlflow_run_id}, Notebook: {trial.notebook_url}")
 
 # COMMAND ----------
 
