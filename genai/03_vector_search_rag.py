@@ -277,14 +277,16 @@ def vector_search(query: str, num_results: int = 3) -> list[dict]:
         query_text=query,
         num_results=num_results,
     )
+    columns = results.result.column_names
+    rows = results.result.data_array
     return [
         {
-            "chunk_id": row["chunk_id"],
-            "title": row["title"],
-            "content": row["content"],
-            "score": row.get("score", 0),
+            "chunk_id": row[columns.index("chunk_id")],
+            "title": row[columns.index("title")],
+            "content": row[columns.index("content")],
+            "score": row[columns.index("score")] if "score" in columns else 0,
         }
-        for row in results.result.data_array_to_json()
+        for row in rows
     ]
 
 # 検索テスト
