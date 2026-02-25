@@ -219,13 +219,16 @@ inference_sdf = spark.createDataFrame(
     pd.DataFrame({"wine_id": [0, 10, 50, 100, 150]})
 )
 
-# Feature Storeから特徴量を自動取得して推論
-predictions = fe.score_batch(
-    model_uri=f"runs:/{run.info.run_id}/model",
-    df=inference_sdf,
-)
+# Feature Storeから特徴量を取得して結合
+inference_pdf = inference_sdf.join(
+    spark.table(feature_table_name), on="wine_id"
+).toPandas()
 
-display(predictions.select("wine_id", "prediction"))
+# 記録したモデルをロードして推論
+loaded_model = mlflow.sklearn.load_model(f"runs:/{run.info.run_id}/model")
+inference_pdf["prediction"] = loaded_model.predict(inference_pdf[feature_cols])
+
+display(spark.createDataFrame(inference_pdf[["wine_id", "prediction"]]))
 
 # COMMAND ----------
 
