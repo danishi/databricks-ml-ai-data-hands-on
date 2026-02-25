@@ -205,12 +205,13 @@ display(spark.table(source_table))
 from databricks.sdk.service.vectorsearch import (
     DeltaSyncVectorIndexSpecRequest,
     EmbeddingSourceColumn,
+    EndpointType,
     VectorIndexType,
 )
 
 # Vector Searchエンドポイントを作成（既存なら再利用）
 try:
-    w.vector_search_endpoints.create_and_wait(name=vs_endpoint_name, endpoint_type="STANDARD")
+    w.vector_search_endpoints.create_endpoint_and_wait(name=vs_endpoint_name, endpoint_type=EndpointType.STANDARD)
     print(f"Vector Search エンドポイント '{vs_endpoint_name}' を作成しました")
 except Exception as e:
     print(f"エンドポイント '{vs_endpoint_name}' は既に存在します（再利用します）")
