@@ -8,7 +8,7 @@
 # MAGIC
 # MAGIC ## Databricks Apps とは？
 # MAGIC
-# MAGIC > **Databricks Apps** は、Streamlit などのフレームワークで作った Web アプリを
+# MAGIC > **Databricks Apps** は、Streamlit・Gradio・Dash などのフレームワークで作った Web アプリを
 # MAGIC > Databricks ワークスペース内でホスティングできる機能です。
 # MAGIC > アプリから Model Serving エンドポイントを **セキュアに** 呼び出すことができます。
 # MAGIC
@@ -43,7 +43,7 @@
 # MAGIC
 # MAGIC | 機能 | 説明 |
 # MAGIC |---|---|
-# MAGIC | **Streamlit アプリのホスティング** | Python だけでインタラクティブな Web アプリを公開 |
+# MAGIC | **Web アプリのホスティング** | Streamlit / Gradio / Dash / Flask をサポート |
 # MAGIC | **自動認証** | WorkspaceClient が自動的に認証（トークン管理不要） |
 # MAGIC | **Model Serving 連携** | エンドポイントをセキュアに呼び出し |
 # MAGIC | **アクセス制御** | ワークスペースのユーザー管理と連動 |
@@ -53,15 +53,27 @@
 # MAGIC %md
 # MAGIC ## 2. アプリのファイル構成
 # MAGIC
-# MAGIC Databricks Apps に必要なファイルは最低 **2つ** だけです:
+# MAGIC Databricks Apps に必要なファイル構成です:
 # MAGIC
 # MAGIC ```
 # MAGIC app/                          ← デプロイ時に指定するフォルダ
-# MAGIC ├── app.py                    ← メインのアプリコード（必須）
-# MAGIC └── requirements.txt          ← 使用するライブラリ一覧（必須）
+# MAGIC ├── app.py                    ← メインのアプリコード
+# MAGIC ├── app.yaml                  ← アプリの実行設定（エントリポイント等）
+# MAGIC └── requirements.txt          ← 使用するライブラリ一覧
 # MAGIC ```
 # MAGIC
-# MAGIC ### requirements.txt の書き方
+# MAGIC ### app.yaml の内容
+# MAGIC
+# MAGIC `app.yaml` はアプリの起動コマンドや環境変数を定義するファイルです。
+# MAGIC
+# MAGIC ```yaml
+# MAGIC command: ['streamlit', 'run', 'app.py']
+# MAGIC env:
+# MAGIC   - name: 'STREAMLIT_GATHER_USAGE_STATS'
+# MAGIC     value: 'false'
+# MAGIC ```
+# MAGIC
+# MAGIC ### requirements.txt の内容
 # MAGIC
 # MAGIC ```
 # MAGIC databricks-sdk     ← Databricks API を呼ぶために必須
@@ -170,29 +182,37 @@ except Exception as e:
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### ステップ 2: Databricks Apps でアプリを作成・デプロイ
+# MAGIC ### ステップ 2: Databricks Apps でアプリを作成
 # MAGIC
-# MAGIC 1. 左サイドバーの **「コンピューティング」** をクリック
-# MAGIC 2. **「アプリ」** タブを選択
-# MAGIC 3. **「アプリの作成」** ボタンをクリック
+# MAGIC 1. 左サイドバーの **「+ 新規」** をクリック
+# MAGIC 2. メニューから **「アプリ」** を選択
+# MAGIC 3. **「カスタムアプリを作成」** をクリック
 # MAGIC 4. 以下を設定:
-# MAGIC    - **アプリ名**: `wine-classifier-app`（任意の名前）
+# MAGIC    - **アプリ名**: `wine-classifier-app`（任意の名前、小文字・数字・ハイフンのみ）
 # MAGIC    - **説明**: ワイン分類予測アプリ（任意）
-# MAGIC 5. **「作成」** をクリック
-# MAGIC 6. アプリの設定画面で **「ソースコード」** セクションを確認
-# MAGIC 7. **ソースコードのパス** に、クローンしたリポジトリ内の `app/` フォルダを指定
+# MAGIC 5. **「次: 設定」** をクリック（または「アプリの作成」で詳細設定をスキップ）
+# MAGIC 6. 必要に応じて以下を設定:
+# MAGIC    - **アプリのリソース**: 「サービングエンドポイント」リソースとして `wine-classifier-endpoint` を追加
+# MAGIC    - **コンピュートサイズ**: アプリの CPU・メモリを設定
+# MAGIC 7. **「アプリの作成」** をクリック
+# MAGIC
+# MAGIC ### ステップ 3: アプリをデプロイ
+# MAGIC
+# MAGIC 1. アプリの詳細画面で **「デプロイ」** ボタンをクリック
+# MAGIC 2. ワークスペース内の `app/` フォルダを選択
 # MAGIC    - 例: `/Workspace/Users/<ユーザー名>/databricks-ai-ml-hands-on/app`
-# MAGIC 8. **「デプロイ」** ボタンをクリック
-# MAGIC 9. デプロイが完了するまで数分待ちます
+# MAGIC 3. **「選択」** → **「デプロイ」** をクリック
+# MAGIC 4. デプロイが完了するまで数分待ちます
 # MAGIC
-# MAGIC ### ステップ 3: アプリにアクセス
+# MAGIC ### ステップ 4: アプリにアクセス
 # MAGIC
-# MAGIC デプロイ完了後、表示される **URL** をクリックするとアプリが開きます。
+# MAGIC デプロイ完了後、アプリ詳細画面に表示される **URL** をクリックするとアプリが開きます。
 # MAGIC
 # MAGIC > **トラブルシューティング**:
 # MAGIC > - エラー「エンドポイントが見つからない」→ `ml/08_model_serving.py` を先に実行
 # MAGIC > - エラー「予測に失敗」→ エンドポイントが「Ready」状態か確認
 # MAGIC > - 画面が表示されない → デプロイが完了するまで数分待つ
+# MAGIC > - デプロイ失敗 → アプリの詳細画面のログを確認
 
 # COMMAND ----------
 
@@ -207,7 +227,7 @@ except Exception as e:
 # MAGIC スライダーの初期値が変わります。
 # MAGIC
 # MAGIC > **変更後の再デプロイ**: ソースコードを変更した後、
-# MAGIC > アプリの設定画面で **「再デプロイ」** をクリックすると更新が反映されます。
+# MAGIC > アプリの詳細画面で **「デプロイ」** をクリックして再デプロイすると更新が反映されます。
 
 # COMMAND ----------
 
@@ -220,7 +240,7 @@ except Exception as e:
 # MAGIC | **Model Serving** | エンドポイント稼働時間 | `scale_to_zero_enabled=True` で最適化 |
 # MAGIC
 # MAGIC > **重要**: ハンズオン終了後は以下を忘れずに実行してください:
-# MAGIC > 1. Databricks Apps を停止・削除（「コンピューティング」→「アプリ」から）
+# MAGIC > 1. Databricks Apps を停止・削除（サイドバー「コンピューティング」→「アプリ」タブから）
 # MAGIC > 2. Model Serving エンドポイントを削除（`ml/10_cleanup.py` を実行）
 # MAGIC > 3. クラスターを停止
 
@@ -233,9 +253,9 @@ except Exception as e:
 # MAGIC このノートブックでは以下を学びました:
 # MAGIC
 # MAGIC 1. **Databricks Apps** — Streamlit アプリをワークスペース内でホスティング
-# MAGIC 2. **ファイル構成** — `app.py` + `requirements.txt` の2ファイルだけでOK
+# MAGIC 2. **ファイル構成** — `app.py` + `app.yaml` + `requirements.txt` の3ファイル構成
 # MAGIC 3. **自動認証** — WorkspaceClient で Model Serving を簡単に呼び出し
-# MAGIC 4. **デプロイ** — UI からフォルダを指定するだけの簡単操作
+# MAGIC 4. **デプロイ** — サイドバー「+ 新規」→「アプリ」からフォルダを指定するだけの簡単操作
 # MAGIC
 # MAGIC ### 次のステップ
 # MAGIC - アプリの UI を自分好みにカスタマイズしてみましょう
