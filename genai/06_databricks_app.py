@@ -173,6 +173,11 @@ with open("../app_rag/app.py", "r") as f:
 
 # COMMAND ----------
 
+# MAGIC %pip install -q openai
+# MAGIC dbutils.library.restartPython()
+
+# COMMAND ----------
+
 import os
 from openai import OpenAI
 
