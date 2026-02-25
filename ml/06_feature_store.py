@@ -225,7 +225,7 @@ inference_pdf = inference_sdf.join(
 ).toPandas()
 
 # 記録したモデルをロードして推論
-loaded_model = mlflow.sklearn.load_model(f"runs:/{run.info.run_id}/model")
+loaded_model = mlflow.pyfunc.load_model(f"runs:/{run.info.run_id}/model")
 inference_pdf["prediction"] = loaded_model.predict(inference_pdf[feature_cols])
 
 display(spark.createDataFrame(inference_pdf[["wine_id", "prediction"]]))
