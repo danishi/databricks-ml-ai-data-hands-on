@@ -179,7 +179,7 @@ from sklearn.metrics import accuracy_score
 
 # 学習データを準備
 training_pdf = training_df.toPandas()
-feature_cols = feature_names
+feature_cols = [c for c in training_pdf.columns if c not in ("wine_id", "target")]
 X = training_pdf[feature_cols]
 y = training_pdf["target"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
