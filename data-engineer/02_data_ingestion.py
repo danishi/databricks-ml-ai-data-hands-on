@@ -411,6 +411,10 @@ print("Auto Loader による取り込みが完了しました")
 # MAGIC > **試験ポイント**: Auto Loader は `cloudFiles.schemaLocation` にスキーマを保存し、
 # MAGIC > 新しいカラムが検出された場合にスキーマを自動的に進化させることができます。
 # MAGIC > `_rescued_data` カラムには、スキーマに合わないデータが自動的に格納されます。
+# MAGIC
+# MAGIC > **動作メモ**: `schemaEvolutionMode="addNewColumns"` は新しいカラムを検出すると
+# MAGIC > `UNKNOWN_FIELD_EXCEPTION` で意図的に1度失敗します。スキーマ情報を更新した後、
+# MAGIC > ストリームを再起動すると新しいスキーマで正常に取り込まれます。
 
 # COMMAND ----------
 
@@ -431,30 +435,40 @@ print("新しいカラム（discount）を含むデータを追加しました")
 # COMMAND ----------
 
 # Auto Loader で再度取り込み（新しいファイルのみ処理される）
+# schemaEvolutionMode="addNewColumns" は新しいカラムを検出すると
+# スキーマを更新した上で意図的に1度失敗し、再起動時に新スキーマで取り込みます。
 checkpoint_path_v2 = f"{BASE_PATH}/checkpoints/orders_autoloader"
 
-df_autoloader_v2 = (
-    spark.readStream.format("cloudFiles")
-    .option("cloudFiles.format", "csv")
-    .option("cloudFiles.schemaLocation", checkpoint_path_v2)
-    .option("cloudFiles.schemaEvolutionMode", "addNewColumns")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{BASE_PATH}/csv/")
-)
+for attempt in range(2):
+    try:
+        df_autoloader_v2 = (
+            spark.readStream.format("cloudFiles")
+            .option("cloudFiles.format", "csv")
+            .option("cloudFiles.schemaLocation", checkpoint_path_v2)
+            .option("cloudFiles.schemaEvolutionMode", "addNewColumns")
+            .option("header", "true")
+            .option("inferSchema", "true")
+            .load(f"{BASE_PATH}/csv/")
+        )
 
-query_v2 = (
-    df_autoloader_v2.writeStream
-    .format("delta")
-    .option("checkpointLocation", checkpoint_path_v2)
-    .option("mergeSchema", "true")
-    .outputMode("append")
-    .trigger(availableNow=True)
-    .toTable("default.orders_autoloader")
-)
+        query_v2 = (
+            df_autoloader_v2.writeStream
+            .format("delta")
+            .option("checkpointLocation", checkpoint_path_v2)
+            .option("mergeSchema", "true")
+            .outputMode("append")
+            .trigger(availableNow=True)
+            .toTable("default.orders_autoloader")
+        )
 
-query_v2.awaitTermination()
-print("スキーマ進化を含むデータの取り込みが完了しました")
+        query_v2.awaitTermination()
+        print("スキーマ進化を含むデータの取り込みが完了しました")
+        break
+    except Exception as e:
+        if "UNKNOWN_FIELD_EXCEPTION" in str(e) and attempt == 0:
+            print("新しいカラムを検出しました。スキーマを更新して再試行します...")
+        else:
+            raise
 
 # COMMAND ----------
 
