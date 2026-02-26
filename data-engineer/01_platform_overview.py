@@ -263,10 +263,14 @@ for key, label in configs:
 
 # dbutils.fs でファイルシステムを確認
 print("=== DBFS ルートディレクトリの内容 ===")
-files = dbutils.fs.ls("/")
-for f in files[:10]:  # 先頭10件を表示
-    file_type = "DIR" if f.isDir() else "FILE"
-    print(f"  [{file_type}] {f.name}")
+try:
+    files = dbutils.fs.ls("/")
+    for f in files[:10]:  # 先頭10件を表示
+        file_type = "DIR" if f.isDir() else "FILE"
+        print(f"  [{file_type}] {f.name}")
+except Exception as e:
+    print(f"  DBFS へのアクセスが制限されています（Unity Catalog 環境では正常な動作です）")
+    print(f"  理由: {e}")
 
 # COMMAND ----------
 
@@ -277,8 +281,9 @@ for f in files[:10]:  # 先頭10件を表示
 # MAGIC > クラウドストレージ（S3, ADLS, GCS）を抽象化して、ローカルファイルのように扱えます。
 # MAGIC > `dbutils.fs` や `/dbfs/` パスでアクセスできます。
 # MAGIC >
-# MAGIC > ただし Unity Catalog が有効な環境では、DBFS よりも Unity Catalog の
-# MAGIC > ボリューム（Volumes）を使ったファイルアクセスが推奨されています。
+# MAGIC > **注意**: Unity Catalog が有効な環境では、DBFS へのアクセスが制限される場合があります。
+# MAGIC > 上のセルでエラーが出た場合は正常な動作です。現在は Unity Catalog の
+# MAGIC > **ボリューム（Volumes）** を使ったファイルアクセスが推奨されています。
 
 # COMMAND ----------
 
@@ -411,10 +416,15 @@ print("=== ヘルプの確認方法 ===")
 print("1. help(関数名)  → 関数のドキュメントを表示")
 print("2. 関数名?       → Jupyter スタイルのヘルプ")
 print("3. dbutils.fs.help() → dbutils のヘルプ")
+print("4. dbutils.help()    → dbutils 全体のヘルプ")
 print()
 
 # dbutils のヘルプを表示
-dbutils.fs.help()
+try:
+    dbutils.fs.help()
+except Exception:
+    print("dbutils.fs.help() は現在の環境では利用できません。")
+    print("dbutils の主なモジュール: fs, notebook, widgets, secrets, library")
 
 # COMMAND ----------
 
