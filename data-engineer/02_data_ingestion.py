@@ -435,13 +435,12 @@ print("Auto Loader による取り込みが完了しました")
 # MAGIC > 新しいカラムが検出された場合にスキーマを自動的に進化させることができます。
 # MAGIC > `_rescued_data` カラムには、スキーマに合わないデータが自動的に格納されます。
 # MAGIC
-# MAGIC > **動作メモ**: `schemaEvolutionMode="addNewColumns"` は新しいカラムを検出すると
-# MAGIC > `UNKNOWN_FIELD_EXCEPTION` で意図的に1度失敗します。スキーマ情報を更新した後、
-# MAGIC > ストリームを再起動すると新しいスキーマで正常に取り込まれます。
+# MAGIC > **動作メモ**: 新しいカラムを含むファイルを Auto Loader で取り込む際、
+# MAGIC > `mergeSchema` オプションを有効にすると、Delta テーブルに自動的に新しいカラムが追加されます。
 
 # COMMAND ----------
 
-# スキーマ進化のデモ: 新しいカラムを持つデータを追加
+# スキーマ進化のデモ: 新しいカラム（discount）を持つデータを別ディレクトリに作成
 csv_data_v2 = "order_id,customer_id,product_name,quantity,price,order_date,discount\n"
 for i in range(101, 111):
     product = random.choice(products)
@@ -451,47 +450,38 @@ for i in range(101, 111):
     discount = random.choice([0, 5, 10, 15, 20])
     csv_data_v2 += f"{i},{random.randint(1000, 1099)},{product},{qty},{price},{date},{discount}\n"
 
-with open(f"{BASE_PATH}/csv/orders_v2.csv", "w") as f:
+os.makedirs(f"{BASE_PATH}/csv_v2", exist_ok=True)
+with open(f"{BASE_PATH}/csv_v2/orders_v2.csv", "w") as f:
     f.write(csv_data_v2)
 print("新しいカラム（discount）を含むデータを追加しました")
 
 # COMMAND ----------
 
-# Auto Loader で再度取り込み（新しいファイルのみ処理される）
-# schemaEvolutionMode="addNewColumns" は新しいカラムを検出すると
-# スキーマを更新した上で意図的に1度失敗し、再起動時に新スキーマで取り込みます。
-checkpoint_path_v2 = f"{BASE_PATH}/checkpoints/orders_autoloader"
+# Auto Loader で新しいスキーマのデータを取り込み
+# mergeSchema により、既存テーブルに discount カラムが自動追加される
+checkpoint_path_v2 = f"{BASE_PATH}/checkpoints/orders_autoloader_v2"
 
-for attempt in range(2):
-    try:
-        df_autoloader_v2 = (
-            spark.readStream.format("cloudFiles")
-            .option("cloudFiles.format", "csv")
-            .option("cloudFiles.schemaLocation", checkpoint_path_v2)
-            .option("cloudFiles.schemaEvolutionMode", "addNewColumns")
-            .option("header", "true")
-            .option("inferSchema", "true")
-            .load(f"{BASE_PATH}/csv/")
-        )
+df_autoloader_v2 = (
+    spark.readStream.format("cloudFiles")
+    .option("cloudFiles.format", "csv")
+    .option("cloudFiles.schemaLocation", checkpoint_path_v2)
+    .option("header", "true")
+    .option("inferSchema", "true")
+    .load(f"{BASE_PATH}/csv_v2/")
+)
 
-        query_v2 = (
-            df_autoloader_v2.writeStream
-            .format("delta")
-            .option("checkpointLocation", checkpoint_path_v2)
-            .option("mergeSchema", "true")
-            .outputMode("append")
-            .trigger(availableNow=True)
-            .toTable("default.orders_autoloader")
-        )
+query_v2 = (
+    df_autoloader_v2.writeStream
+    .format("delta")
+    .option("checkpointLocation", checkpoint_path_v2)
+    .option("mergeSchema", "true")
+    .outputMode("append")
+    .trigger(availableNow=True)
+    .toTable("default.orders_autoloader")
+)
 
-        query_v2.awaitTermination()
-        print("スキーマ進化を含むデータの取り込みが完了しました")
-        break
-    except Exception as e:
-        if "UNKNOWN_FIELD_EXCEPTION" in str(e) and attempt == 0:
-            print("新しいカラムを検出しました。スキーマを更新して再試行します...")
-        else:
-            raise
+query_v2.awaitTermination()
+print("スキーマ進化を含むデータの取り込みが完了しました")
 
 # COMMAND ----------
 
