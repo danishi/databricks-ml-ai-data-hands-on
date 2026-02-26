@@ -1,16 +1,17 @@
-# Databricks ML / 生成AI / データ分析 ハンズオン
+# Databricks ML / 生成AI / データ分析 / データエンジニア ハンズオン
 
-Databricks 上で機械学習（ML）、生成AI、データ分析を体系的に学べるハンズオン教材です。
+Databricks 上で機械学習（ML）、生成AI、データ分析、データエンジニアリングを体系的に学べるハンズオン教材です。
 
 **Databricks 認定資格の試験範囲をカバー**:
 - [Databricks Certified Machine Learning Associate](https://www.databricks.com/learn/certification/machine-learning-associate)
 - [Databricks Certified Generative AI Engineer Associate](https://www.databricks.com/learn/certification/generative-ai-engineer-associate)
 - [Databricks Certified Data Analyst Associate](https://www.databricks.com/learn/certification/data-analyst-associate)
+- [Databricks Certified Data Engineer Associate](https://www.databricks.com/jp/learn/certification/data-engineer-associate)
 
 ## 対象者
 
 - Databricks をこれから使い始める方
-- 機械学習や生成AI に興味があるエンジニア・データサイエンティスト
+- 機械学習や生成AI、データエンジニアリングに興味があるエンジニア・データサイエンティスト
 - SQL を使ったデータ分析に興味があるデータアナリスト
 - Databricks 認定資格の取得を目指す方
 - Python の基本的な知識がある方（Data Analyst コースは SQL が中心）
@@ -23,6 +24,7 @@ Databricks 上で機械学習（ML）、生成AI、データ分析を体系的�
 - Databricks ワークスペース（Community Edition でも一部可※）
 - **ML / GenAI コース**: Databricks Runtime ML（例: 16.x ML）のクラスター
 - **Data Analyst コース**: Databricks Runtime（例: 16.x）のクラスター（ML版でなくてもOK）
+- **データエンジニアコース**: Databricks Runtime（例: 16.x）のクラスター（ML Runtime でなくてもOK）
 - クラスターサイズは **シングルノード（Single Node）** で十分です
 
 > ※ Community Edition では Model Serving、Databricks Apps、Vector Search、Feature Store、AutoML は利用できません。
@@ -43,7 +45,7 @@ Databricks 上で機械学習（ML）、生成AI、データ分析を体系的�
 2. **「クラスターを作成」** をクリック
 3. 以下の設定を推奨:
    - クラスターモード: **シングルノード**
-   - Databricks Runtime: **Runtime ML** を選択（例: 16.x ML）
+   - Databricks Runtime: **Runtime ML** を選択（例: 16.x ML）※Data Analyst / データエンジニアコースは通常 Runtime でもOK
    - ノードタイプ: 最小構成でOK
 
 ### 3. ノートブックの実行
@@ -94,6 +96,20 @@ Databricks 上で機械学習（ML）、生成AI、データ分析を体系的�
 | 9 | `data-analyst/09_securing_data.py` | 権限管理、動的ビュー、PII保護、Secret Scope | データセキュリティ |
 | 10 | `data-analyst/10_cleanup.py` | リソースのクリーンアップ | — |
 
+### Data Engineer（データエンジニア）
+
+| # | ノートブック | 内容 | 試験範囲 |
+|---|---|---|---|
+| 1 | `data-engineer/01_platform_overview.py` | Databricks Data Intelligence Platform の概要、マジックコマンド、クラスター | プラットフォーム |
+| 2 | `data-engineer/02_data_ingestion.py` | CSV/JSON/Parquet 読み込み、COPY INTO、Auto Loader | 開発・取り込み |
+| 3 | `data-engineer/03_sql_dml_operations.py` | DDL/DML 操作、MERGE（UPSERT）、Databricks Connect | 開発・取り込み |
+| 4 | `data-engineer/04_delta_lake.py` | Delta Lake、タイムトラベル、OPTIMIZE、VACUUM、Liquid Clustering | データ処理・変換 |
+| 5 | `data-engineer/05_medallion_architecture.py` | メダリオンアーキテクチャ、ETL パイプライン、Spark SQL/PySpark 変換 | データ処理・変換 |
+| 6 | `data-engineer/06_lakeflow_declarative_pipelines.py` | Lakeflow Declarative Pipelines（旧 DLT）、Expectations | データ処理・変換 |
+| 7 | `data-engineer/07_workflows_and_jobs.py` | Workflows、CRON スケジューリング、DABs、サーバーレス | パイプライン本番化 |
+| 8 | `data-engineer/08_unity_catalog_governance.py` | Unity Catalog、権限管理、Delta Sharing、Lakehouse Federation | ガバナンス・品質 |
+| 9 | `data-engineer/09_cleanup.py` | リソースのクリーンアップ | — |
+
 ### App（Databricks Apps）
 
 | ファイル | 内容 | 対応ノートブック |
@@ -136,6 +152,16 @@ Databricks 上で機械学習（ML）、生成AI、データ分析を体系的�
 | **Developing AI/BI Genie Spaces** | 12% | 07 (Genie Space, Trusted Assets, 最適化) |
 | **Data Modeling with Databricks SQL** | 5% | 08 (スタースキーマ, メダリオンアーキテクチャ) |
 | **Securing Data** | 8% | 09 (権限管理, 動的ビュー, PII保護) |
+
+### Databricks Certified Data Engineer Associate
+
+| 試験セクション | 比重 | 対応するノートブック |
+|---|---|---|
+| **Databricks Intelligence Platform** | 10% | 01 (プラットフォーム概要, マジックコマンド, クラスター) |
+| **Development and Ingestion** | 30% | 02 (Auto Loader, COPY INTO), 03 (DDL/DML, Databricks Connect) |
+| **Data Processing & Transformations** | 31% | 04 (Delta Lake), 05 (メダリオンアーキテクチャ), 06 (Lakeflow Declarative Pipelines) |
+| **Productionizing Data Pipelines** | 18% | 07 (Workflows, CRON, DABs, サーバーレス) |
+| **Data Governance & Quality** | 11% | 08 (Unity Catalog, Delta Sharing, Lakehouse Federation) |
 
 ## 推奨する実行順序
 
@@ -181,7 +207,21 @@ Databricks 上で機械学習（ML）、生成AI、データ分析を体系的�
 10. data-analyst/10_cleanup.py             ← リソースの削除（終了時）
 ```
 
-> ML コース、GenAI コース、Data Analyst コースは独立しており、どれから始めても構いません。
+### Data Engineer コース
+
+```
+1. data-engineer/01_platform_overview.py            ← プラットフォームの概要
+2. data-engineer/02_data_ingestion.py               ← データの取り込み（Auto Loader, COPY INTO）
+3. data-engineer/03_sql_dml_operations.py           ← SQL DDL/DML 操作（MERGE 等）
+4. data-engineer/04_delta_lake.py                   ← Delta Lake の基礎
+5. data-engineer/05_medallion_architecture.py       ← メダリオンアーキテクチャ（Bronze/Silver/Gold）
+6. data-engineer/06_lakeflow_declarative_pipelines.py ← Lakeflow Declarative Pipelines
+7. data-engineer/07_workflows_and_jobs.py           ← Workflows とジョブ管理
+8. data-engineer/08_unity_catalog_governance.py     ← Unity Catalog とデータガバナンス
+9. data-engineer/09_cleanup.py                      ← リソースの削除（終了時）
+```
+
+> ML コース、GenAI コース、Data Analyst コース、Data Engineer コースは独立しており、どれから始めても構いません。
 
 ## Databricks App のデプロイ方法
 
@@ -232,6 +272,16 @@ databricks-ai-ml-hands-on/
 │   ├── 08_data_modeling.py                    # データモデリング
 │   ├── 09_securing_data.py                    # データセキュリティ
 │   └── 10_cleanup.py                          # クリーンアップ
+├── data-engineer/                            # データエンジニアリングノートブック
+│   ├── 01_platform_overview.py                # プラットフォーム概要
+│   ├── 02_data_ingestion.py                   # データ取り込み
+│   ├── 03_sql_dml_operations.py               # SQL DDL/DML 操作
+│   ├── 04_delta_lake.py                       # Delta Lake
+│   ├── 05_medallion_architecture.py           # メダリオンアーキテクチャ
+│   ├── 06_lakeflow_declarative_pipelines.py   # Lakeflow Declarative Pipelines
+│   ├── 07_workflows_and_jobs.py               # Workflows・ジョブ管理
+│   ├── 08_unity_catalog_governance.py         # Unity Catalog・ガバナンス
+│   └── 09_cleanup.py                          # クリーンアップ
 ├── app/                                       # Databricks App: ワイン分類予測
 │   ├── app.py
 │   └── requirements.txt
@@ -249,10 +299,10 @@ databricks-ai-ml-hands-on/
 - **GenAI 01〜05**: Foundation Model APIs は pay-per-token（少額）
 - **GenAI 03 (Vector Search)**: Vector Search エンドポイント稼働時間に応じた課金
 - **Databricks App**: アプリ稼働時間に応じた課金
-
 - **Data Analyst 01〜09**: シングルノードクラスターで各数分で完了
+- **Data Engineer 01〜08**: シングルノードクラスターで各数分で完了
 
-> **重要**: ハンズオン終了後は必ずクリーンアップノートブック（`ml/10_cleanup.py`、`genai/07_cleanup.py`、`data-analyst/10_cleanup.py`）を実行してください。
+> **重要**: ハンズオン終了後は必ずクリーンアップノートブック（`ml/10_cleanup.py`、`genai/07_cleanup.py`、`data-analyst/10_cleanup.py`、`data-engineer/09_cleanup.py`）を実行してください。
 
 ## ライセンス
 
