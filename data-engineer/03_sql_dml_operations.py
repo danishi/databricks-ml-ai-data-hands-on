@@ -62,7 +62,7 @@
 # MAGIC   category STRING,
 # MAGIC   price DECIMAL(10, 2),
 # MAGIC   stock INT,
-# MAGIC   created_at TIMESTAMP DEFAULT current_timestamp()
+# MAGIC   created_at TIMESTAMP
 # MAGIC )
 
 # COMMAND ----------
