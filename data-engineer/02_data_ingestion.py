@@ -52,6 +52,7 @@ import json
 from datetime import datetime, timedelta
 import random
 import os
+import shutil
 
 # Unity Catalog ボリュームの設定
 CATALOG = "main"
@@ -64,9 +65,12 @@ spark.sql(f"CREATE VOLUME IF NOT EXISTS {CATALOG}.{SCHEMA}.{VOLUME_NAME}")
 # サンプルデータの保存先（Unity Catalog Volume）
 BASE_PATH = f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME_NAME}"
 
-# サブディレクトリの作成
+# 前回のデータがあれば削除して再作成（ノートブックの再実行に対応）
 for subdir in ["csv", "json", "parquet", "checkpoints"]:
-    os.makedirs(f"{BASE_PATH}/{subdir}", exist_ok=True)
+    subdir_path = f"{BASE_PATH}/{subdir}"
+    if os.path.exists(subdir_path):
+        shutil.rmtree(subdir_path)
+    os.makedirs(subdir_path)
 
 # --- CSV データの作成 ---
 csv_data = "order_id,customer_id,product_name,quantity,price,order_date\n"
@@ -366,6 +370,8 @@ print("2回目の COPY INTO が完了しました（べき等）")
 # COMMAND ----------
 
 # Auto Loader によるデータ取り込み
+# 前回の実行結果をクリーンアップ（再実行に対応）
+spark.sql("DROP TABLE IF EXISTS default.orders_autoloader")
 checkpoint_path = f"{BASE_PATH}/checkpoints/orders_autoloader"
 
 df_autoloader = (
