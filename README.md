@@ -4,7 +4,7 @@ Databricks 上で機械学習（ML）、生成AI、データ分析を体系的�
 
 **Databricks 認定資格の試験範囲をカバー**:
 - [Databricks Certified Machine Learning Associate](https://www.databricks.com/learn/certification/machine-learning-associate)
-- [Databricks Certified Generative AI Engineer Associate](https://www.databricks.com/learn/certification/generative-ai-engineer-associate)
+- [Databricks Certified Generative AI Engineer Associate](https://www.databricks.com/learn/certification/genai-engineer-associate)
 - [Databricks Certified Data Analyst Associate](https://www.databricks.com/learn/certification/data-analyst-associate)
 
 ## 対象者
