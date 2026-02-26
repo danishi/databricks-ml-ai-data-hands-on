@@ -1,17 +1,19 @@
-# Databricks ML / 生成AI ハンズオン
+# Databricks ML / 生成AI / データ分析 ハンズオン
 
-Databricks 上で機械学習（ML）と生成AI を体系的に学べるハンズオン教材です。
+Databricks 上で機械学習（ML）、生成AI、データ分析を体系的に学べるハンズオン教材です。
 
 **Databricks 認定資格の試験範囲をカバー**:
 - [Databricks Certified Machine Learning Associate](https://www.databricks.com/learn/certification/machine-learning-associate)
 - [Databricks Certified Generative AI Engineer Associate](https://www.databricks.com/learn/certification/generative-ai-engineer-associate)
+- [Databricks Certified Data Analyst Associate](https://www.databricks.com/learn/certification/data-analyst-associate)
 
 ## 対象者
 
 - Databricks をこれから使い始める方
 - 機械学習や生成AI に興味があるエンジニア・データサイエンティスト
+- SQL を使ったデータ分析に興味があるデータアナリスト
 - Databricks 認定資格の取得を目指す方
-- Python の基本的な知識がある方
+- Python の基本的な知識がある方（Data Analyst コースは SQL が中心）
 
 > **初心者の方へ**: 各ノートブックには「用語メモ」「試してみよう」「認定試験との関連」といった
 > 補足解説が豊富に含まれています。上から順番にセルを実行するだけで、概念の理解から実践まで一通り体験できます。
@@ -19,11 +21,13 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 ## 必要な環境
 
 - Databricks ワークスペース（Community Edition でも一部可※）
-- **Databricks Runtime ML**（例: 16.x ML）のクラスター
+- **ML / GenAI コース**: Databricks Runtime ML（例: 16.x ML）のクラスター
+- **Data Analyst コース**: Databricks Runtime（例: 16.x）のクラスター（ML版でなくてもOK）
 - クラスターサイズは **シングルノード（Single Node）** で十分です
 
 > ※ Community Edition では Model Serving、Databricks Apps、Vector Search、Feature Store、AutoML は利用できません。
 > これらの機能を試す場合は有償ワークスペースが必要です。
+> Data Analyst コースは Unity Catalog が有効なワークスペースを推奨します。
 
 ## 使い方
 
@@ -75,6 +79,21 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 | 6 | `genai/06_databricks_app.py` | Databricks Apps による RAG チャットボットのデプロイ | Databricks ツール |
 | 7 | `genai/07_cleanup.py` | リソースのクリーンアップ | — |
 
+### Data Analyst（データ分析）
+
+| # | ノートブック | 内容 | 試験範囲 |
+|---|---|---|---|
+| 1 | `data-analyst/01_databricks_platform.py` | プラットフォーム概要、Unity Catalog、Catalog Explorer | プラットフォーム理解 |
+| 2 | `data-analyst/02_managing_data.py` | テーブル管理、データクリーニング、タグ・コメント | データ管理 |
+| 3 | `data-analyst/03_importing_data.py` | UIアップロード、Auto Loader、Delta Sharing | データインポート |
+| 4 | `data-analyst/04_sql_queries.py` | 集約、JOIN、CTE、ウィンドウ関数、タイムトラベル | SQLクエリ実行 |
+| 5 | `data-analyst/05_query_analysis.py` | Photon、クエリプロファイル、キャッシュ、Liquid Clustering | クエリ分析 |
+| 6 | `data-analyst/06_dashboards_visualizations.py` | AI/BIダッシュボード、可視化、パラメータ、アラート | ダッシュボード |
+| 7 | `data-analyst/07_genie_spaces.py` | Genie Space作成、Trusted Assets、最適化 | Genie Spaces |
+| 8 | `data-analyst/08_data_modeling.py` | スタースキーマ、メダリオンアーキテクチャ | データモデリング |
+| 9 | `data-analyst/09_securing_data.py` | 権限管理、動的ビュー、PII保護、Secret Scope | データセキュリティ |
+| 10 | `data-analyst/10_cleanup.py` | リソースのクリーンアップ | — |
+
 ### App（Databricks Apps）
 
 | ファイル | 内容 | 対応ノートブック |
@@ -103,6 +122,20 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 | **Evaluate and Optimize** | 05 (LLM-as-a-Judge, 評価指標) |
 | **Governance and Security** | 05 (ガードレール, PII検出, 責任あるAI) |
 | **Databricks Tools** | 01 (Foundation Model APIs), 03 (Vector Search), 06 (Databricks Apps) |
+
+### Databricks Certified Data Analyst Associate
+
+| 試験セクション | 比重 | 対応するノートブック |
+|---|---|---|
+| **Understanding of Databricks Data Intelligence Platform** | 11% | 01 (プラットフォーム, Unity Catalog, Catalog Explorer) |
+| **Managing Data** | 8% | 02 (テーブル管理, データクリーニング, タグ・リネージ) |
+| **Importing Data** | 5% | 03 (UIアップロード, Auto Loader, Delta Sharing) |
+| **Executing Queries using Databricks SQL** | 20% | 04 (集約, JOIN, CTE, ウィンドウ関数, タイムトラベル) |
+| **Analyzing Queries** | 15% | 05 (Photon, クエリプロファイル, キャッシュ, Liquid Clustering) |
+| **Creating Dashboards and Visualizations** | 16% | 06 (AI/BIダッシュボード, 可視化, パラメータ, アラート) |
+| **Developing AI/BI Genie Spaces** | 12% | 07 (Genie Space, Trusted Assets, 最適化) |
+| **Data Modeling with Databricks SQL** | 5% | 08 (スタースキーマ, メダリオンアーキテクチャ) |
+| **Securing Data** | 8% | 09 (権限管理, 動的ビュー, PII保護) |
 
 ## 推奨する実行順序
 
@@ -133,7 +166,22 @@ Databricks 上で機械学習（ML）と生成AI を体系的に学べるハン�
 7. genai/07_cleanup.py                  ← リソースの削除（終了時）
 ```
 
-> ML コースと GenAI コースは独立しており、どちらから始めても構いません。
+### Data Analyst コース
+
+```
+1. data-analyst/01_databricks_platform.py  ← プラットフォームの全体像
+2. data-analyst/02_managing_data.py        ← データの管理とクリーニング
+3. data-analyst/03_importing_data.py       ← データのインポート方法
+4. data-analyst/04_sql_queries.py          ← SQLクエリの実行（最重要）
+5. data-analyst/05_query_analysis.py       ← クエリの分析と最適化
+6. data-analyst/06_dashboards_visualizations.py ← ダッシュボードと可視化
+7. data-analyst/07_genie_spaces.py         ← AI/BI Genie Spaces
+8. data-analyst/08_data_modeling.py        ← データモデリング
+9. data-analyst/09_securing_data.py        ← データセキュリティ
+10. data-analyst/10_cleanup.py             ← リソースの削除（終了時）
+```
+
+> ML コース、GenAI コース、Data Analyst コースは独立しており、どれから始めても構いません。
 
 ## Databricks App のデプロイ方法
 
@@ -173,6 +221,17 @@ databricks-ai-ml-hands-on/
 │   ├── 05_evaluation_governance.py              # 評価とガバナンス
 │   ├── 06_databricks_app.py                     # Databricks Apps デプロイ
 │   └── 07_cleanup.py                            # クリーンアップ
+├── data-analyst/                             # データ分析ノートブック
+│   ├── 01_databricks_platform.py              # プラットフォーム概要
+│   ├── 02_managing_data.py                    # データ管理
+│   ├── 03_importing_data.py                   # データインポート
+│   ├── 04_sql_queries.py                      # SQLクエリ実行
+│   ├── 05_query_analysis.py                   # クエリ分析・最適化
+│   ├── 06_dashboards_visualizations.py        # ダッシュボード・可視化
+│   ├── 07_genie_spaces.py                     # AI/BI Genie Spaces
+│   ├── 08_data_modeling.py                    # データモデリング
+│   ├── 09_securing_data.py                    # データセキュリティ
+│   └── 10_cleanup.py                          # クリーンアップ
 ├── app/                                       # Databricks App: ワイン分類予測
 │   ├── app.py
 │   └── requirements.txt
@@ -191,7 +250,9 @@ databricks-ai-ml-hands-on/
 - **GenAI 03 (Vector Search)**: Vector Search エンドポイント稼働時間に応じた課金
 - **Databricks App**: アプリ稼働時間に応じた課金
 
-> **重要**: ハンズオン終了後は必ずクリーンアップノートブック（`ml/10_cleanup.py`、`genai/07_cleanup.py`）を実行してください。
+- **Data Analyst 01〜09**: シングルノードクラスターで各数分で完了
+
+> **重要**: ハンズオン終了後は必ずクリーンアップノートブック（`ml/10_cleanup.py`、`genai/07_cleanup.py`、`data-analyst/10_cleanup.py`）を実行してください。
 
 ## ライセンス
 
